@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react";
 import { useGame } from "./store/gameStore";
 import HomeScreen from "./screens/HomeScreen";
 import ReadyScreen from "./screens/ReadyScreen";
@@ -18,6 +19,7 @@ export default function App() {
       {screen === "results" && <ResultsScreen />}
       {screen === "champion" && <ChampionScreen />}
       {showOnboarding && screen === "home" && <OnboardingOverlay />}
+      <Analytics />
     </div>
   );
 }
