@@ -1,0 +1,297 @@
+@import "tailwindcss";
+
+@theme {
+  /* A sala: escuro, quente, nunca neutro. */
+  --color-bg1: #14070c;
+  --color-bg2: #2b1018;
+  /* O veludo da cortina, quando a luz bate. */
+  --color-veludo: #7a1f2b;
+  --color-veludoluz: #99303d;
+
+  /* A marquise. */
+  --color-gold: #f2c14e;
+  --color-golddim: #a9852f;
+
+  /* O ingresso. */
+  --color-cardlight: #fff8ed;
+  --color-cardink: #241014;
+
+  --color-ok: #3da35d;
+  --color-passc: #8a5a63;
+  --color-danger: #d1495b;
+  --color-mutedc: #caa9a1;
+
+  --font-display: "Anton", sans-serif;
+  --font-sans: "Poppins", sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: radial-gradient(ellipse at 50% -10%, rgba(242, 193, 78, 0.1), transparent 55%),
+    linear-gradient(180deg, var(--color-bg1), var(--color-bg2));
+  color: var(--color-cardlight);
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.01em;
+}
+
+/* Anton em corpo grande fecha melhor com tracking negativo. */
+.font-display.tracking-tight-display {
+  letter-spacing: -0.015em;
+}
+
+/* Placar e cronômetro não podem mudar de largura a cada segundo. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(242, 193, 78, 0.25);
+}
+
+/* Régua fina dourada — o divisor da casa. */
+.hairline {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(242, 193, 78, 0.45) 20%,
+    rgba(242, 193, 78, 0.45) 80%,
+    transparent
+  );
+}
+
+/* ---------- foco visível ---------- */
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ---------- o ingresso ---------- */
+
+.ticket {
+  position: relative;
+  background: var(--color-cardlight);
+  color: var(--color-cardink);
+}
+
+/* Os dois recortes onde o fiscal destaca o canhoto. */
+.ticket::before,
+.ticket::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-bg1);
+  transform: translateY(-50%);
+}
+.ticket::before {
+  left: -11px;
+}
+.ticket::after {
+  right: -11px;
+}
+
+.ticket-perf {
+  border-top: 2px dashed rgba(36, 16, 20, 0.22);
+}
+
+/* ---------- a cortina ---------- */
+
+.curtain-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 52%;
+  background: repeating-linear-gradient(
+      90deg,
+      #4d1119 0px,
+      var(--color-veludo) 14px,
+      var(--color-veludoluz) 21px,
+      var(--color-veludo) 28px,
+      #4d1119 42px
+    ),
+    var(--color-veludo);
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.55);
+  transition: transform 900ms cubic-bezier(0.7, 0, 0.25, 1);
+  will-change: transform;
+}
+.curtain-panel.left {
+  left: 0;
+  border-right: 2px solid rgba(242, 193, 78, 0.3);
+}
+.curtain-panel.right {
+  right: 0;
+  border-left: 2px solid rgba(242, 193, 78, 0.3);
+}
+.curtain-open .curtain-panel.left {
+  transform: translateX(-101%);
+}
+.curtain-open .curtain-panel.right {
+  transform: translateX(101%);
+}
+
+/* ---------- animações ---------- */
+
+@keyframes flipIn {
+  0% {
+    transform: rotateX(90deg);
+    opacity: 0;
+  }
+  100% {
+    transform: rotateX(0);
+    opacity: 1;
+  }
+}
+.animate-flip {
+  animation: flipIn 0.32s ease;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+.bulb {
+  animation: twinkle 1.8s ease-in-out infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.35;
+  }
+}
+.animate-blink {
+  animation: blink 1s steps(2) infinite;
+}
+
+@keyframes pulseSpot {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+.spotlight {
+  animation: pulseSpot 2.6s ease-in-out infinite;
+}
+
+@keyframes flashOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.animate-flash {
+  animation: flashOut 0.35s ease forwards;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.animate-pop {
+  animation: popIn 0.4s ease;
+}
+
+@keyframes confettiFall {
+  to {
+    transform: translateY(110vh) rotate(720deg);
+    opacity: 0.7;
+  }
+}
+.confetti {
+  position: absolute;
+  top: -16px;
+  width: 8px;
+  height: 14px;
+  opacity: 0.9;
+  pointer-events: none;
+  animation: confettiFall linear forwards;
+}
+
+@keyframes bounceTrophy {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+.animate-trophy {
+  animation: bounceTrophy 1.2s ease infinite;
+}
+
+@keyframes sheetUp {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+.animate-sheet {
+  animation: sheetUp 0.24s ease-out;
+}
+
+/* ---------- movimento reduzido ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .curtain-panel {
+    transition: opacity 200ms linear;
+  }
+  .curtain-open .curtain-panel.left,
+  .curtain-open .curtain-panel.right {
+    transform: none;
+    opacity: 0;
+  }
+  .confetti {
+    display: none;
+  }
+  .animate-flip,
+  .bulb,
+  .animate-blink,
+  .spotlight,
+  .animate-pop,
+  .animate-trophy,
+  .animate-sheet {
+    animation: none;
+  }
+}

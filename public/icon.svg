@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#14070c"/>
+  <g transform="translate(0 22)">
+  <defs>
+    <mask id="recortes">
+      <rect width="512" height="512" fill="#000"/>
+      <rect x="106" y="172" width="300" height="196" rx="26" fill="#fff"/>
+      <circle cx="106" cy="270" r="28" fill="#000"/>
+      <circle cx="406" cy="270" r="28" fill="#000"/>
+    </mask>
+  </defs>
+
+  <!-- lâmpadas da marquise -->
+  <circle cx="196" cy="124" r="13" fill="#f2c14e"/>
+  <circle cx="256" cy="112" r="13" fill="#f2c14e"/>
+  <circle cx="316" cy="124" r="13" fill="#f2c14e"/>
+
+  <!-- o ingresso, com os recortes do canhoto -->
+  <g mask="url(#recortes)">
+    <rect x="106" y="172" width="300" height="196" rx="26" fill="#f2c14e"/>
+  </g>
+
+  <!-- M vazado -->
+  <path d="M 214 322 L 214 224 L 256 276 L 298 224 L 298 322"
+        fill="none" stroke="#241014" stroke-width="30"
+        stroke-linejoin="miter" stroke-linecap="square"/>
+</g>
+</svg>

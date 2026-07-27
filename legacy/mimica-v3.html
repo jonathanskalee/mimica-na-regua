@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mímica na Régua</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-1:#170b10;
+    --bg-2:#2b1018;
+    --gold:#f2c14e;
+    --gold-dim:#a9852f;
+    --card:#fff8ed;
+    --card-ink:#241014;
+    --ok:#3da35d;
+    --pass:#8a5a63;
+    --danger:#d1495b;
+    --muted:#caa9a1;
+    --panel:rgba(255,255,255,.06);
+    --line:rgba(242,193,78,.25);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{
+    margin:0;padding:0;height:100%;
+    font-family:'Poppins',sans-serif;
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(242,193,78,.10), transparent 55%),
+      linear-gradient(180deg,var(--bg-1),var(--bg-2));
+    color:var(--card);
+    overflow:hidden;
+  }
+  #app{position:relative;width:100%;height:100dvh;display:flex;flex-direction:column;}
+
+  .eyebrow{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-dim);font-weight:600;}
+  .marquee-title{font-family:'Anton',sans-serif;letter-spacing:.02em;color:var(--gold);text-shadow:0 0 18px rgba(242,193,78,.35);}
+  .bulbs{display:flex;gap:6px;justify-content:center;}
+  .bulbs span{width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 6px 1px rgba(242,193,78,.8);animation:twinkle 1.8s ease-in-out infinite;}
+  .bulbs span:nth-child(odd){animation-delay:.4s;}
+  .bulbs span:nth-child(3n){animation-delay:.9s;}
+  @keyframes twinkle{0%,100%{opacity:.35;transform:scale(.8);}50%{opacity:1;transform:scale(1.1);}}
+
+  button{font-family:'Poppins',sans-serif;cursor:pointer;border:none;color:inherit;background:none;}
+  button:active{transform:scale(.97);}
+  input{font-family:'Poppins',sans-serif;}
+
+  .screen{flex:1;display:none;flex-direction:column;min-height:0;}
+  .screen.active{display:flex;}
+
+  /* ================= HOME ================= */
+  #screen-home{padding:0;}
+  .home-scroll{
+    flex:1;overflow-y:auto;padding:20px 18px 110px;
+    display:flex;flex-direction:column;gap:16px;align-items:center;
+    -webkit-overflow-scrolling:touch;
+  }
+  .home-head{text-align:center;display:flex;flex-direction:column;gap:8px;align-items:center;margin-bottom:2px;}
+  .logo-title{font-size:38px;line-height:.95;margin:0;}
+  .logo-sub{max-width:280px;color:var(--muted);font-size:12px;margin:0;}
+
+  .panel{
+    width:100%;max-width:360px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:14px;
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .panel-title{
+    display:flex;align-items:center;justify-content:space-between;
+    font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);
+  }
+  .panel-title .hint{font-weight:500;text-transform:none;letter-spacing:0;color:var(--muted);font-size:11px;}
+
+  .seg{display:flex;gap:6px;background:rgba(0,0,0,.25);border-radius:12px;padding:4px;}
+  .seg button{
+    flex:1;border-radius:9px;padding:9px 4px;font-size:12px;font-weight:600;color:var(--muted);line-height:1.25;
+  }
+  .seg button b{display:block;font-size:13px;color:var(--card);}
+  .seg button.active{background:var(--gold);color:#241014;}
+  .seg button.active b{color:#241014;}
+  .seg.lvl button.active[data-level="facil"]{background:var(--ok);color:#eafff1;}
+  .seg.lvl button.active[data-level="facil"] b{color:#eafff1;}
+  .seg.lvl button.active[data-level="medio"]{background:#d38b2c;color:#241014;}
+  .seg.lvl button.active[data-level="dificil"]{background:var(--danger);color:#fff0ea;}
+  .seg.lvl button.active[data-level="dificil"] b{color:#fff0ea;}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    border:1px solid var(--line);
+    background:rgba(0,0,0,.2);
+    border-radius:999px;
+    padding:7px 12px;
+    font-size:12px;font-weight:600;color:var(--muted);
+    display:flex;align-items:center;gap:5px;
+  }
+  .chip.on{background:rgba(242,193,78,.18);border-color:var(--gold);color:var(--card);}
+  .chip.all{border-style:dashed;}
+
+  .setting-line{
+    display:flex;align-items:center;gap:10px;font-size:13px;min-height:34px;
+  }
+  .setting-line .grow{flex:1;}
+  .stepper{display:flex;align-items:center;gap:8px;}
+  .stepper button{
+    width:30px;height:30px;border-radius:9px;
+    background:rgba(242,193,78,.15);color:var(--gold);font-size:16px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .stepper .val{font-family:'Anton',sans-serif;color:var(--gold);min-width:34px;text-align:center;font-size:16px;}
+  .mini-seg{display:flex;gap:4px;background:rgba(0,0,0,.25);border-radius:9px;padding:3px;}
+  .mini-seg button{border-radius:7px;padding:5px 10px;font-size:12px;font-weight:600;color:var(--muted);}
+  .mini-seg button.active{background:var(--gold);color:#241014;}
+
+  .switch{
+    position:relative;width:44px;height:26px;border-radius:999px;
+    background:rgba(0,0,0,.35);border:1px solid var(--line);flex-shrink:0;
+    transition:background .15s;
+  }
+  .switch::after{
+    content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;
+    background:var(--muted);transition:all .15s;
+  }
+  .switch.on{background:rgba(61,163,93,.5);border-color:var(--ok);}
+  .switch.on::after{left:20px;background:#eafff1;}
+
+  .team-config{display:none;flex-direction:column;gap:10px;}
+  .team-config.show{display:flex;}
+  .team-name-row{display:flex;align-items:center;gap:8px;}
+  .team-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+  .team-name-row input{
+    flex:1;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:9px;
+    padding:8px 10px;color:var(--card);font-size:13px;outline:none;
+  }
+  .team-name-row input:focus{border-color:var(--gold);}
+
+  .home-links{display:flex;gap:18px;font-size:12px;color:var(--muted);}
+  .home-links button{text-decoration:underline;color:var(--muted);}
+
+  .start-bar{
+    position:absolute;bottom:0;left:0;right:0;
+    padding:12px 18px calc(14px + env(safe-area-inset-bottom));
+    background:linear-gradient(180deg,transparent,rgba(23,11,16,.92) 30%);
+    display:flex;justify-content:center;
+  }
+  #btn-start{
+    width:100%;max-width:360px;
+    background:var(--gold);color:#241014;
+    border-radius:16px;padding:16px;
+    font-family:'Anton',sans-serif;font-size:20px;letter-spacing:.06em;
+    box-shadow:0 6px 0 rgba(0,0,0,.3), 0 10px 30px rgba(242,193,78,.25);
+  }
+  #btn-start:active{box-shadow:0 2px 0 rgba(0,0,0,.3);}
+  #start-summary{
+    text-align:center;font-size:11px;color:var(--muted);margin-top:6px;
+  }
+
+  /* ================= READY ================= */
+  #screen-ready{align-items:center;justify-content:center;gap:16px;padding:20px;text-align:center;}
+  .ready-team{
+    font-family:'Anton',sans-serif;font-size:26px;padding:8px 22px;border-radius:12px;
+    display:none;
+  }
+  .ready-team.show{display:block;}
+  .ready-level{font-family:'Anton',sans-serif;font-size:20px;color:var(--gold);}
+  .ready-mode{font-size:12px;color:var(--muted);}
+  .big-countdown{font-family:'Anton',sans-serif;font-size:110px;color:var(--card);text-shadow:0 0 40px rgba(242,193,78,.5);line-height:1;}
+  .ready-hint{color:var(--muted);font-size:13px;max-width:270px;margin:0;}
+  #btn-cancel-ready{color:var(--muted);text-decoration:underline;font-size:13px;}
+
+  /* ================= GAME ================= */
+  #screen-game{padding:14px 16px calc(20px + env(safe-area-inset-bottom));}
+  .game-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px;}
+  .pill{
+    background:var(--panel);border:1px solid var(--line);border-radius:999px;
+    padding:6px 11px;font-size:11px;display:flex;align-items:center;gap:6px;white-space:nowrap;
+  }
+  .pill b{color:var(--gold);font-family:'Anton',sans-serif;font-size:15px;}
+  #team-banner{
+    display:none;align-items:center;justify-content:center;gap:8px;
+    font-size:12px;font-weight:700;margin-bottom:6px;padding:5px;border-radius:9px;
+  }
+  #team-banner.show{display:flex;}
+
+  #timer-wrap{position:relative;width:58px;height:58px;flex-shrink:0;}
+  #timer-wrap svg{transform:rotate(-90deg);}
+  #timer-wrap circle{fill:none;stroke-width:5;}
+  .timer-bg{stroke:rgba(255,255,255,.12);}
+  .timer-fg{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset 1s linear;}
+  #timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Anton',sans-serif;font-size:18px;color:var(--card);}
+  #timer-wrap.urgent .timer-fg{stroke:var(--danger);}
+  #timer-wrap.urgent #timer-num{color:var(--danger);animation:blink 1s steps(2) infinite;}
+  @keyframes blink{50%{opacity:.35;}}
+  #timer-wrap.paused .timer-fg{stroke:var(--muted);}
+
+  .top-btn{
+    width:42px;height:42px;border-radius:50%;
+    background:rgba(242,193,78,.14);border:1px solid var(--line);color:var(--gold);
+    font-size:17px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .top-btn.is-paused{background:var(--gold);color:#241014;}
+
+  .stage{flex:1;display:flex;align-items:center;justify-content:center;position:relative;margin:8px 0;min-height:0;}
+  .spotlight{position:absolute;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(242,193,78,.16),transparent 65%);animation:pulseSpot 2.6s ease-in-out infinite;}
+  @keyframes pulseSpot{0%,100%{opacity:.6;transform:scale(1);}50%{opacity:1;transform:scale(1.06);}}
+
+  .ticket{
+    position:relative;background:var(--card);color:var(--card-ink);
+    border-radius:18px;padding:30px 20px;width:100%;max-width:310px;min-height:180px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;
+    box-shadow:0 18px 40px rgba(0,0,0,.45);
+    transition:background .2s;
+  }
+  .ticket::before,.ticket::after{
+    content:"";position:absolute;width:22px;height:22px;background:var(--bg-2);border-radius:50%;top:50%;transform:translateY(-50%);
+  }
+  .ticket::before{left:-11px;}
+  .ticket::after{right:-11px;}
+  .ticket.bonus{
+    background:linear-gradient(160deg,#ffe9b0,#f2c14e);
+    box-shadow:0 18px 40px rgba(0,0,0,.45), 0 0 34px rgba(242,193,78,.55);
+  }
+  .bonus-tag{
+    display:none;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+    background:#241014;color:var(--gold);padding:4px 12px;border-radius:999px;
+  }
+  .ticket.bonus .bonus-tag{display:inline-block;}
+  .cat-tag{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8a6a70;font-weight:700;}
+  #word-text{font-family:'Anton',sans-serif;font-size:33px;line-height:1.05;word-break:break-word;}
+  .ticket.flip{animation:flipIn .32s ease;}
+  @keyframes flipIn{0%{transform:rotateX(90deg);opacity:0;}100%{transform:rotateX(0);opacity:1;}}
+
+  .pause-overlay{
+    position:absolute;inset:0;border-radius:18px;background:rgba(36,16,20,.95);color:var(--gold);
+    display:none;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;z-index:2;
+  }
+  .pause-overlay.show{display:flex;}
+  .pause-overlay .ic{font-size:30px;}
+  .pause-overlay b{font-family:'Anton',sans-serif;font-size:20px;letter-spacing:.04em;}
+  .pause-overlay span{font-size:12px;color:var(--muted);max-width:200px;}
+
+  .tilt-hints{display:none;justify-content:space-between;font-size:11px;color:var(--muted);padding:0 4px 6px;}
+  .tilt-hints.show{display:flex;}
+
+  .game-actions{display:flex;gap:12px;}
+  .btn-action{
+    flex:1;border-radius:16px;padding:16px 10px;font-weight:700;font-size:15px;
+    display:flex;flex-direction:column;align-items:center;gap:3px;
+    box-shadow:0 6px 0 rgba(0,0,0,.25);
+  }
+  .btn-action .ic{font-size:21px;}
+  .btn-action small{font-size:10px;font-weight:600;opacity:.8;}
+  .btn-pass{background:var(--pass);color:#fff0ea;}
+  .btn-ok{background:var(--ok);color:#eafff1;}
+  .btn-action:active{box-shadow:0 2px 0 rgba(0,0,0,.25);}
+  .btn-action:disabled{opacity:.4;}
+  #btn-end-round{margin-top:10px;color:var(--muted);font-size:12px;text-decoration:underline;align-self:center;}
+
+  /* flash feedback */
+  #flash{position:absolute;inset:0;pointer-events:none;opacity:0;z-index:5;}
+  #flash.ok{background:radial-gradient(circle,rgba(61,163,93,.4),transparent 70%);animation:flash .35s ease;}
+  #flash.bad{background:radial-gradient(circle,rgba(209,73,91,.4),transparent 70%);animation:flash .35s ease;}
+  @keyframes flash{0%{opacity:1;}100%{opacity:0;}}
+
+  /* ================= RESULTS / CHAMPION ================= */
+  #screen-results,#screen-champion{align-items:center;justify-content:center;padding:24px 22px;gap:14px;text-align:center;overflow-y:auto;}
+  .score-big{font-family:'Anton',sans-serif;font-size:64px;color:var(--gold);line-height:1;}
+  .score-label{color:var(--muted);font-size:13px;}
+  .record-toast{
+    display:none;background:rgba(242,193,78,.15);border:1px solid var(--gold);color:var(--gold);
+    padding:6px 16px;border-radius:999px;font-size:12px;font-weight:700;
+    animation:pop .4s ease;
+  }
+  .record-toast.show{display:block;}
+  @keyframes pop{0%{transform:scale(.6);opacity:0;}100%{transform:scale(1);opacity:1;}}
+  .word-lists{width:100%;max-width:320px;display:flex;flex-direction:column;gap:8px;max-height:30vh;overflow-y:auto;}
+  .word-row{display:flex;align-items:center;justify-content:space-between;background:var(--panel);border-radius:10px;padding:8px 13px;font-size:13px;gap:8px;}
+  .word-row.pass{opacity:.55;}
+  .word-row .w{text-align:left;flex:1;}
+  .tag{font-size:10px;padding:2px 8px;border-radius:999px;font-weight:700;white-space:nowrap;}
+  .tag.ok{background:rgba(61,163,93,.2);color:#7fdb9b;}
+  .tag.pass{background:rgba(138,90,99,.3);color:#e3b9c0;}
+  .tag.bonus{background:rgba(242,193,78,.25);color:var(--gold);}
+  .results-actions{display:flex;gap:10px;width:100%;max-width:320px;}
+  .btn-secondary{flex:1;background:var(--panel);color:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px;font-weight:600;font-size:13px;}
+  .btn-primary{flex:1;background:var(--gold);color:#241014;border-radius:14px;padding:13px;font-weight:700;font-size:13px;}
+
+  .scoreboard{width:100%;max-width:320px;display:flex;flex-direction:column;gap:8px;}
+  .score-row{
+    display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);
+    border-radius:12px;padding:11px 14px;font-size:14px;
+  }
+  .score-row.leader{border-color:var(--gold);background:rgba(242,193,78,.12);}
+  .score-row .nm{flex:1;text-align:left;font-weight:600;}
+  .score-row .pt{font-family:'Anton',sans-serif;font-size:20px;color:var(--gold);}
+  .trophy{font-size:56px;animation:bounceT 1.2s ease infinite;}
+  @keyframes bounceT{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+  .champ-name{font-family:'Anton',sans-serif;font-size:34px;color:var(--gold);}
+
+  .confetti{position:absolute;top:-10px;width:8px;height:14px;opacity:.9;animation:fall linear forwards;pointer-events:none;z-index:1;}
+  @keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.7;}}
+
+  /* ================= RECORDS ================= */
+  #screen-records{padding:24px 20px;gap:14px;align-items:center;overflow-y:auto;}
+  .rec-grid{width:100%;max-width:340px;display:flex;flex-direction:column;gap:8px;}
+  .rec-row{display:flex;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:11px 14px;font-size:13px;gap:10px;}
+  .rec-row .lbl{flex:1;text-align:left;}
+  .rec-row .lbl small{display:block;color:var(--muted);font-size:11px;}
+  .rec-row .pt{font-family:'Anton',sans-serif;font-size:22px;color:var(--gold);}
+
+  /* ================= MODAL (custom words) ================= */
+  .modal-bg{
+    position:absolute;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-end;justify-content:center;z-index:20;
+  }
+  .modal-bg.show{display:flex;}
+  .modal{
+    width:100%;max-width:420px;background:var(--bg-2);border:1px solid var(--line);
+    border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));
+    display:flex;flex-direction:column;gap:12px;max-height:80dvh;
+  }
+  .modal h3{margin:0;font-family:'Anton',sans-serif;color:var(--gold);font-size:18px;letter-spacing:.03em;}
+  .modal p{margin:0;font-size:12px;color:var(--muted);}
+  .modal textarea{
+    background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:12px;
+    padding:12px;color:var(--card);font-size:14px;min-height:110px;resize:vertical;outline:none;
+  }
+  .modal textarea:focus{border-color:var(--gold);}
+  .custom-count{font-size:12px;color:var(--gold);}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ HOME ============ -->
+  <div class="screen active" id="screen-home">
+    <div class="home-scroll">
+      <div class="home-head">
+        <div class="bulbs"><span></span><span></span><span></span><span></span><span></span></div>
+        <h1 class="logo-title marquee-title">MÍMICA NA RÉGUA</h1>
+        <p class="logo-sub">Monte a partida do seu jeito e faça o time adivinhar sem falar nadinha.</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Modo de jogo</div>
+        <div class="seg" id="mode-seg">
+          <button class="active" data-mode="total"><b>🏃 Corrida</b>Tempo total da rodada</button>
+          <button data-mode="perword"><b>⚡ Relâmpago</b>Tempo por palavra</button>
+        </div>
+        <div class="setting-line">
+          <span class="grow" id="setting-time-label">⏱ Tempo da rodada</span>
+          <div class="stepper">
+            <button id="time-minus">–</button>
+            <span class="val" id="time-val">60</span>
+            <button id="time-plus">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Nível</div>
+        <div class="seg lvl" id="level-seg">
+          <button class="active" data-level="facil"><b>1</b>Fácil</button>
+          <button data-level="medio"><b>2</b>Médio</button>
+          <button data-level="dificil"><b>3</b>Difícil</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Categorias <span class="hint" id="cat-count"></span></div>
+        <div class="chips" id="cat-chips"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Times <div class="switch" id="sw-teams"></div></div>
+        <div class="team-config" id="team-config">
+          <div class="setting-line">
+            <span class="grow">Quantidade de times</span>
+            <div class="mini-seg" id="team-count-seg">
+              <button class="active" data-n="2">2</button>
+              <button data-n="3">3</button>
+              <button data-n="4">4</button>
+            </div>
+          </div>
+          <div class="setting-line">
+            <span class="grow">Rodadas por time</span>
+            <div class="mini-seg" id="team-rounds-seg">
+              <button class="active" data-n="1">1</button>
+              <button data-n="2">2</button>
+              <button data-n="3">3</button>
+            </div>
+          </div>
+          <div id="team-names"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Regras</div>
+        <div class="setting-line">
+          <span class="grow">✨ Palavras bônus (valem +2)</span>
+          <div class="switch on" id="sw-bonus"></div>
+        </div>
+        <div class="setting-line">
+          <span class="grow">⏭ Limite de pulos</span>
+          <div class="mini-seg" id="skip-seg">
+            <button class="active" data-n="-1">∞</button>
+            <button data-n="3">3</button>
+            <button data-n="5">5</button>
+          </div>
+        </div>
+        <div class="setting-line">
+          <span class="grow">🚫 Pular desconta 1 ponto</span>
+          <div class="switch" id="sw-penalty"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Experiência</div>
+        <div class="setting-line">
+          <span class="grow">🔊 Sons</span>
+          <div class="switch on" id="sw-sound"></div>
+        </div>
+        <div class="setting-line">
+          <span class="grow">📳 Vibração</span>
+          <div class="switch on" id="sw-vibe"></div>
+        </div>
+        <div class="setting-line">
+          <span class="grow">🤳 Modo testa (inclinar o celular)</span>
+          <div class="switch" id="sw-tilt"></div>
+        </div>
+        <div class="setting-line">
+          <span class="grow">🖥 Tela cheia</span>
+          <div class="switch" id="sw-fullscreen"></div>
+        </div>
+      </div>
+
+      <div class="home-links">
+        <button id="btn-open-records">🏆 Recordes</button>
+        <button id="btn-open-custom">📝 Minhas palavras</button>
+      </div>
+    </div>
+
+    <div class="start-bar">
+      <div style="width:100%;max-width:360px;">
+        <button id="btn-start">JOGAR</button>
+        <div id="start-summary"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ READY ============ -->
+  <div class="screen" id="screen-ready">
+    <div class="ready-team" id="ready-team"></div>
+    <div class="ready-level" id="ready-level-label"></div>
+    <div class="ready-mode" id="ready-mode-label"></div>
+    <div class="big-countdown" id="ready-countdown">3</div>
+    <p class="ready-hint" id="ready-hint">Passa o celular pra quem vai fazer a mímica. Ninguém mais pode ver a palavra!</p>
+    <button id="btn-cancel-ready">Cancelar</button>
+  </div>
+
+  <!-- ============ GAME ============ -->
+  <div class="screen" id="screen-game">
+    <div id="flash"></div>
+    <div id="team-banner"></div>
+    <div class="game-top">
+      <div class="pill">Nível <b id="game-level-label">Fácil</b></div>
+      <button class="top-btn" id="btn-pause">⏸</button>
+      <div id="timer-wrap">
+        <svg width="58" height="58">
+          <circle class="timer-bg" cx="29" cy="29" r="25"></circle>
+          <circle class="timer-fg" id="timer-circle" cx="29" cy="29" r="25"></circle>
+        </svg>
+        <div id="timer-num">60</div>
+      </div>
+      <div class="pill">Pontos <b id="score-label">0</b></div>
+    </div>
+
+    <div class="stage">
+      <div class="spotlight"></div>
+      <div class="ticket" id="ticket">
+        <span class="bonus-tag">★ Vale 3 pontos ★</span>
+        <span class="cat-tag" id="cat-tag"></span>
+        <div id="word-text">PALAVRA</div>
+        <div class="pause-overlay" id="pause-overlay">
+          <div class="ic">⏸</div>
+          <b>PAUSADO</b>
+          <span>Toque em play pra continuar de onde parou</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tilt-hints" id="tilt-hints">
+      <span>⬆ Inclinar pra cima = pular</span>
+      <span>⬇ Inclinar pra baixo = acertou</span>
+    </div>
+
+    <div class="game-actions">
+      <button class="btn-action btn-pass" id="btn-pass"><span class="ic">⏭</span>Pular<small id="skip-left"></small></button>
+      <button class="btn-action btn-ok" id="btn-ok"><span class="ic">✓</span>Acertou<small>&nbsp;</small></button>
+    </div>
+    <button id="btn-end-round">Encerrar rodada</button>
+  </div>
+
+  <!-- ============ RESULTS (fim de rodada) ============ -->
+  <div class="screen" id="screen-results">
+    <div class="eyebrow" id="results-eyebrow">Fim da rodada</div>
+    <div class="score-big" id="final-score">0</div>
+    <div class="score-label">pontos na rodada</div>
+    <div class="record-toast" id="record-toast">🏆 Novo recorde!</div>
+    <div class="scoreboard" id="mid-scoreboard" style="display:none;"></div>
+    <div class="word-lists" id="word-lists"></div>
+    <div class="results-actions">
+      <button class="btn-secondary" id="btn-back-home">Menu</button>
+      <button class="btn-primary" id="btn-next-action">Jogar de novo</button>
+    </div>
+  </div>
+
+  <!-- ============ CHAMPION ============ -->
+  <div class="screen" id="screen-champion">
+    <div class="trophy">🏆</div>
+    <div class="eyebrow">Campeão da partida</div>
+    <div class="champ-name" id="champ-name">Time 1</div>
+    <div class="scoreboard" id="final-scoreboard"></div>
+    <div class="results-actions">
+      <button class="btn-secondary" id="btn-champ-home">Menu</button>
+      <button class="btn-primary" id="btn-rematch">Revanche</button>
+    </div>
+  </div>
+
+  <!-- ============ RECORDS ============ -->
+  <div class="screen" id="screen-records">
+    <div class="eyebrow">Seus recordes</div>
+    <h2 class="marquee-title" style="font-size:26px;margin:0;">🏆 MELHORES PONTUAÇÕES</h2>
+    <div class="rec-grid" id="rec-grid"></div>
+    <button class="btn-secondary" id="btn-records-back" style="max-width:340px;width:100%;">Voltar</button>
+  </div>
+
+  <!-- ============ MODAL: CUSTOM WORDS ============ -->
+  <div class="modal-bg" id="modal-custom">
+    <div class="modal">
+      <h3>📝 Minhas palavras</h3>
+      <p>Digite uma palavra por linha. Elas entram como a categoria "Personalizadas" — perfeitas pra piadas internas do grupo!</p>
+      <textarea id="custom-input" placeholder="Ex:&#10;Churrasco do tio&#10;Aquela viagem&#10;Chefe bravo"></textarea>
+      <div class="custom-count" id="custom-count"></div>
+      <div class="results-actions">
+        <button class="btn-secondary" id="btn-custom-cancel">Cancelar</button>
+        <button class="btn-primary" id="btn-custom-save">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ================================================================
+   BANCO DE PALAVRAS — por categoria e nível (1 fácil / 2 médio / 3 difícil)
+================================================================ */
+const BANK = {
+  objetos:{name:"Objetos",icon:"🧰",
+    1:["Escada","Faca","Chave","Sapato","Relógio","Bolsa","Colar","Brinco","Espelho","Livro","Balão","Bola","Tesoura","Colher","Martelo","Escova de dente","Celular","Sofá","Óculos","Cadeira","Fogão","Copo","Lápis","Vela","Presente","Guarda-chuva","Telefone","Controle remoto","Rolo de papel higiênico","Notebook","Pipa","Berço","Cobertor","Janela","Lanterna","Travesseiro","Mochila","Chapéu"],
+    2:["Chuveiro elétrico","Iô-iô","Trampolim","Compasso","Tocha","Andador infantil","Aspirador de pó","Liquidificador","Furadeira","Extintor","Cadeado","Abridor de lata","Varal","Rodo","Ventilador","Máquina de lavar","Micro-ondas","Termômetro","Binóculos","Bússola","Escada rolante","Cofrinho","Máscara de mergulho"],
+    3:["Frigorífico","Alambique","Ábaco","Periscópio","Estetoscópio","Pêndulo","Ampulheta","Catavento","Ventosa","Manivela","Torniquete","Diapasão","Astrolábio"]},
+  animais:{name:"Animais",icon:"🐾",
+    1:["Leão","Macaco","Elefante","Gato","Cachorro","Galinha","Sapo","Pinguim","Pato","Peixe","Cavalo","Vaca","Porco","Coelho","Borboleta","Abelha","Cobra","Tartaruga","Urso","Rato","Pássaro","Formiga"],
+    2:["Coruja","Gavião","Escorpião","Girafa","Aranha","Canguru","Camaleão","Polvo","Tubarão","Golfinho","Morcego","Tamanduá","Bicho-preguiça","Pavão","Caranguejo","Jacaré","Lobo","Águia","Flamingo","Hipopótamo"],
+    3:["Ornitorrinco","Água-viva","Beija-flor","Louva-a-deus","Vaga-lume","Cupim","Sanguessuga","Lesma","Axolote","Tatu-bola","Camarão","Enguia elétrica"]},
+  acoes:{name:"Ações",icon:"🏃",
+    1:["Dançar","Pular","Aplaudir","Chorar","Correr","Nadar","Cantar","Escovar o cabelo","Espirrar","Tossir","Beijar","Abraçar","Beliscar","Tomar banho","Dormir","Cozinhar","Dirigir","Varrer","Pescar","Tirar foto","Escrever","Ler"],
+    2:["Roncar","Medir","Acampar","Emagrecer","Babar","Fofocar","Meditar","Fazer selfie","Estacionar","Pechinchar","Bocejar","Soluçar","Tropeçar","Assobiar","Engasgar","Maquiar","Tricotar","Surfar","Escalar","Fazer malabarismo","Regar plantas"],
+    3:["Procrastinar","Hipnotizar","Filosofar","Improvisar","Traduzir","Negociar","Subornar","Plagiar","Hesitar","Sonambulismo","Ventriloquia","Fazer lobby"]},
+  comida:{name:"Comida",icon:"🍕",
+    1:["Banana","Pizza","Sorvete","Maçã","Chocolate","Café","Chá","Torta","Sanduíche","Melancia","Pipoca","Churrasco","Ovo frito","Espaguete","Milho","Coco","Abacaxi","Picolé","Bolo","Suco","Hambúrguer"],
+    2:["Panquecas","Feijoada","Brigadeiro","Coxinha","Açaí","Sushi","Fondue","Tapioca","Pastel","Caldo de cana","Pamonha","Quentão","Cachorro-quente","Estrogonofe","Pão de queijo"],
+    3:["Rodízio de pizza","Comida apimentada","Vegetariano","Degustação de vinho","Comida estragada","Dieta detox","Glúten","Fermentação"]},
+  profissoes:{name:"Profissões",icon:"👷",
+    1:["Fotógrafo","Pescador","Palhaço","Professor","Médico","Bombeiro","Policial","Cozinheiro","Cabeleireiro","Dentista","Motorista","Cantor","Jogador de futebol","Pintor","Garçom","Faxineiro"],
+    2:["Jardineiro","Maquiadora","Astronauta","Cientista","Juiz","Veterinário","Arqueólogo","Eletricista","Encanador","Alfaiate","Salva-vidas","Apicultor","DJ","Árbitro","Taxidermista? não — Carteiro","Repórter","Mágico"],
+    3:["Presidente da República","Diplomata","Leiloeiro","Perito criminal","Sommelier","Tabelião","Meteorologista","Lobista","Coach","Influenciador digital","Despachante","Sindicalista"]},
+  lugares:{name:"Lugares",icon:"📍",
+    1:["Casa","Igreja","Praia","Escola","Hospital","Padaria","Fazenda","Piscina","Cinema","Mercado","Parque","Farmácia"],
+    2:["Aeroporto","Circo","Zoológico","Shopping","Jardim","Cachoeira","Lago","Montanha-russa","Museu","Estádio","Delegacia","Biblioteca","Salão de beleza","Rodoviária","Motel","Pedágio"],
+    3:["Hidrelétrica","Geleira","Vulcão","Deserto","Cemitério","Labirinto","Observatório","Plataforma de petróleo","Fronteira","Cartório","Zona portuária","Fórum"]},
+  filmes:{name:"Filmes",icon:"🎬",
+    1:["O Rei Leão","Titanic","Homem-Aranha","Frozen","Toy Story","Shrek","Procurando Nemo","Batman","King Kong","Velozes e Furiosos","A Bela e a Fera","Moana"],
+    2:["Harry Potter","Guerra nas Estrelas","Jurassic Park","De Volta para o Futuro","Os Vingadores","Matrix","E.T.","Zootopia","Encanto","A Princesa e o Sapo","Minha Mãe é uma Peça","As Branquelas","Duro de Matar","Náufrago","O Mágico de Oz","Branca de Neve","Tubarão","Rocky"],
+    3:["O Poderoso Chefão","Cidade de Deus","O Auto da Compadecida","Central do Brasil","Um Sonho de Liberdade","O Sexto Sentido","Forrest Gump","Gladiador","Psicose","Cantando na Chuva","A Paixão de Cristo","Sharknado","Garota Exemplar","Extraordinário","Tropa de Elite","A Origem"]},
+  personagens:{name:"Personagens",icon:"🦸",
+    1:["Pernalonga","Pinóquio","Papai Noel","Super-Homem","Mickey Mouse","Bob Esponja","Cinderela","Hulk","Woody","Coringa","Pikachu","Homem de Ferro"],
+    2:["Sherlock Holmes","Wolverine","Darth Vader","Yoda","Jack Sparrow","Capitão América","Capitão Gancho","Hermione","Gandalf","Frajola","Piu-Piu","Fred Flintstone","Rocky Balboa","Loki","Groot","James Bond","Chaves","Chapolin","Saci-Pererê"],
+    3:["Hannibal Lecter","Freddy Krueger","Katniss Everdeen","Neo","Sarah Connor","Norman Bates","Lord Voldemort","Dom Quixote","Curupira","Mula sem cabeça","Zé Gotinha","Emília (Sítio)"]},
+  conceitos:{name:"Conceitos",icon:"💭",
+    1:["Amor","Sono","Tristeza","Sorte","Música","Sol","Chuva","Estrela","Natal","Aniversário","Frio","Calor","Medo"],
+    2:["Saudade","Ciúme","Preguiça","Vergonha","Alergia","Pesadelo","Magia","Fofoca","Salário","Ressaca","Sombra","Arco-íris","Terremoto","Enjoo","Casamento","Formatura","Mudança","Engarrafamento","Wi-fi caindo","Bateria descarregada","Videochamada","Entrevista de emprego"],
+    3:["Democracia","Inflação","Nostalgia","Karma","Reencarnação","Telepatia","Hipnose","Sarcasmo","Metáfora","Paradoxo","Justiça","Liberdade","Crise existencial","Efeito dominó","Fuso horário","Gravidade","Fotossíntese","Déjà vu","Amnésia","Buraco negro","Inteligência artificial","Criptomoeda","Fake news","Ansiedade","Empatia","Burocracia","Juramento","Herança","Divórcio","Imposto de renda","Aposentadoria","Sinfonia","Golpe de estado","Sonho lúcido","Ilusão de ótica","Meia-idade"]},
+  custom:{name:"Personalizadas",icon:"📝",1:[],2:[],3:[]}
+};
+// pequena correção de item inválido
+BANK.profissoes[2] = BANK.profissoes[2].filter(w=>!w.includes("?"));
+BANK.profissoes[2].push("Carteiro");
+
+const LEVEL_LABELS = {facil:"Fácil", medio:"Médio", dificil:"Difícil"};
+const LEVEL_NUM = {facil:1, medio:2, dificil:3};
+const MODE_LABELS = {total:"Corrida · tempo total", perword:"Relâmpago · tempo por palavra"};
+const TEAM_COLORS = ["#4ea8de","#f2c14e","#3da35d","#d1495b"];
+const PERWORD_WORDS_PER_TURN = 10;
+
+/* ================================================================
+   STORAGE seguro (funciona como arquivo local; degrada em memória)
+================================================================ */
+const memStore = {};
+const store = {
+  get(k){ try{ return localStorage.getItem(k) ?? memStore[k] ?? null; }catch(e){ return memStore[k] ?? null; } },
+  set(k,v){ memStore[k]=v; try{ localStorage.setItem(k,v); }catch(e){} }
+};
+
+/* ================================================================
+   STATE
+================================================================ */
+let S = {
+  mode:"total", level:"facil",
+  roundSeconds:60, wordSeconds:10,
+  cats:new Set(Object.keys(BANK).filter(c=>c!=="custom")),
+  bonus:true, skipLimit:-1, skipPenalty:false,
+  sound:true, vibe:true, tilt:false,
+  teams:false, teamCount:2, teamRounds:1, teamNames:["Time 1","Time 2","Time 3","Time 4"],
+  // runtime
+  timeLeft:0, score:0, deck:[], used:new Set(), current:null, currentBonus:false,
+  history:[], timerId:null, paused:false,
+  skipsUsed:0, wordsThisTurn:0,
+  turnQueue:[], turnIndex:0, teamScores:[],
+  tiltNeutral:true
+};
+
+/* ================================================================
+   ÁUDIO + VIBRAÇÃO
+================================================================ */
+let audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(freq,dur,type="sine",vol=.25,when=0){
+  if(!S.sound) return;
+  const c = ac(); if(!c) return;
+  const o=c.createOscillator(), g=c.createGain();
+  o.type=type; o.frequency.value=freq;
+  g.gain.setValueAtTime(vol,c.currentTime+when);
+  g.gain.exponentialRampToValueAtTime(.001,c.currentTime+when+dur);
+  o.connect(g); g.connect(c.destination);
+  o.start(c.currentTime+when); o.stop(c.currentTime+when+dur);
+}
+const sfx = {
+  ok(){ tone(660,.12,"sine",.3); tone(880,.18,"sine",.3,.1); },
+  bonus(){ tone(660,.1,"sine",.3); tone(880,.1,"sine",.3,.09); tone(1180,.22,"sine",.3,.18); },
+  pass(){ tone(220,.18,"sawtooth",.18); },
+  tick(){ tone(1000,.05,"square",.12); },
+  buzzer(){ tone(180,.5,"sawtooth",.3); tone(140,.5,"sawtooth",.3,.05); },
+  count(){ tone(520,.1,"sine",.25); },
+  go(){ tone(780,.25,"sine",.3); }
+};
+function vibrate(p){ if(S.vibe && navigator.vibrate){ try{ navigator.vibrate(p); }catch(e){} } }
+
+/* ================================================================
+   WAKE LOCK + FULLSCREEN
+================================================================ */
+let wakeLock=null;
+async function keepAwake(){ try{ if('wakeLock' in navigator){ wakeLock = await navigator.wakeLock.request('screen'); } }catch(e){} }
+function releaseAwake(){ try{ wakeLock && wakeLock.release(); wakeLock=null; }catch(e){} }
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible' && screenIs('game')) keepAwake(); });
+
+async function setFullscreen(on){
+  try{
+    if(on && !document.fullscreenElement){ await document.documentElement.requestFullscreen(); }
+    else if(!on && document.fullscreenElement){ await document.exitFullscreen(); }
+  }catch(e){}
+}
+
+/* ================================================================
+   TELAS
+================================================================ */
+const screens = {};
+document.querySelectorAll('.screen').forEach(s=>screens[s.id.replace('screen-','')]=s);
+let currentScreen='home';
+function show(name){
+  Object.values(screens).forEach(s=>s.classList.remove('active'));
+  screens[name].classList.add('active');
+  currentScreen=name;
+}
+function screenIs(n){ return currentScreen===n; }
+
+/* ================================================================
+   HOME — construção da UI
+================================================================ */
+const $ = id=>document.getElementById(id);
+
+// modo
+$('mode-seg').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+  $('mode-seg').querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); S.mode=b.dataset.mode; refreshTimeUI(); refreshSummary();
+});
+function refreshTimeUI(){
+  if(S.mode==='total'){ $('setting-time-label').textContent='⏱ Tempo da rodada (s)'; $('time-val').textContent=S.roundSeconds; }
+  else{ $('setting-time-label').textContent='⚡ Tempo por palavra (s)'; $('time-val').textContent=S.wordSeconds; }
+}
+$('time-minus').onclick=()=>{
+  if(S.mode==='total') S.roundSeconds=Math.max(30,S.roundSeconds-10);
+  else S.wordSeconds=Math.max(5,S.wordSeconds-5);
+  refreshTimeUI(); refreshSummary();
+};
+$('time-plus').onclick=()=>{
+  if(S.mode==='total') S.roundSeconds=Math.min(180,S.roundSeconds+10);
+  else S.wordSeconds=Math.min(30,S.wordSeconds+5);
+  refreshTimeUI(); refreshSummary();
+};
+
+// nível
+$('level-seg').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+  $('level-seg').querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); S.level=b.dataset.level; refreshCatChips(); refreshSummary();
+});
+
+// categorias
+function refreshCatChips(){
+  const wrap=$('cat-chips'); wrap.innerHTML='';
+  const all=document.createElement('button');
+  all.className='chip all'+(S.cats.size===availableCats().length?' on':'');
+  all.textContent='✔ Todas';
+  all.onclick=()=>{
+    const avail=availableCats();
+    if(S.cats.size===avail.length){ S.cats.clear(); S.cats.add(avail[0]); }
+    else{ S.cats=new Set(avail); }
+    refreshCatChips(); refreshSummary();
+  };
+  wrap.appendChild(all);
+  availableCats().forEach(c=>{
+    const btn=document.createElement('button');
+    btn.className='chip'+(S.cats.has(c)?' on':'');
+    btn.innerHTML=BANK[c].icon+' '+BANK[c].name;
+    btn.onclick=()=>{
+      if(S.cats.has(c)){ if(S.cats.size>1) S.cats.delete(c); }
+      else S.cats.add(c);
+      refreshCatChips(); refreshSummary();
+    };
+    wrap.appendChild(btn);
+  });
+  const n=poolFor().length;
+  $('cat-count').textContent=n+' palavras disponíveis';
+}
+function availableCats(){
+  return Object.keys(BANK).filter(c=>BANK[c][LEVEL_NUM[S.level]].length>0);
+}
+function poolFor(){
+  const lvl=LEVEL_NUM[S.level];
+  let pool=[];
+  S.cats.forEach(c=>{ if(BANK[c] && BANK[c][lvl]) pool=pool.concat(BANK[c][lvl].map(w=>({w,c}))); });
+  return pool;
+}
+
+// switches genéricos
+function bindSwitch(id, key, cb){
+  const el=$(id);
+  el.classList.toggle('on', S[key]);
+  el.onclick=()=>{ S[key]=!S[key]; el.classList.toggle('on',S[key]); if(cb)cb(); refreshSummary(); };
+}
+bindSwitch('sw-bonus','bonus');
+bindSwitch('sw-penalty','skipPenalty');
+bindSwitch('sw-sound','sound',()=>{ if(S.sound){ ac(); sfx.ok(); } });
+bindSwitch('sw-vibe','vibe',()=>{ if(S.vibe) vibrate(60); });
+bindSwitch('sw-fullscreen','_fs',()=>{});
+$('sw-fullscreen').onclick=()=>{
+  const el=$('sw-fullscreen');
+  const on=!el.classList.contains('on');
+  el.classList.toggle('on',on);
+  setFullscreen(on);
+};
+bindSwitch('sw-tilt','tilt',async ()=>{
+  if(S.tilt && typeof DeviceOrientationEvent!=='undefined' && DeviceOrientationEvent.requestPermission){
+    try{ const r=await DeviceOrientationEvent.requestPermission(); if(r!=='granted'){ S.tilt=false; $('sw-tilt').classList.remove('on'); alert('Permissão de movimento negada — modo testa desativado.'); } }
+    catch(e){ S.tilt=false; $('sw-tilt').classList.remove('on'); }
+  }
+});
+
+// pulos
+$('skip-seg').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+  $('skip-seg').querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); S.skipLimit=parseInt(b.dataset.n); refreshSummary();
+});
+
+// times
+$('sw-teams').onclick=()=>{
+  S.teams=!S.teams;
+  $('sw-teams').classList.toggle('on',S.teams);
+  $('team-config').classList.toggle('show',S.teams);
+  refreshSummary();
+};
+$('team-count-seg').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+  $('team-count-seg').querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); S.teamCount=parseInt(b.dataset.n); buildTeamNames(); refreshSummary();
+});
+$('team-rounds-seg').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+  $('team-rounds-seg').querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); S.teamRounds=parseInt(b.dataset.n); refreshSummary();
+});
+function buildTeamNames(){
+  const wrap=$('team-names'); wrap.innerHTML='';
+  for(let i=0;i<S.teamCount;i++){
+    const row=document.createElement('div'); row.className='team-name-row';
+    row.innerHTML=`<span class="team-dot" style="background:${TEAM_COLORS[i]}"></span>`;
+    const inp=document.createElement('input');
+    inp.value=S.teamNames[i]; inp.maxLength=16;
+    inp.oninput=()=>{ S.teamNames[i]=inp.value||('Time '+(i+1)); };
+    row.appendChild(inp); wrap.appendChild(row);
+  }
+}
+buildTeamNames();
+
+// resumo
+function refreshSummary(){
+  const parts=[
+    (S.mode==='total'?'🏃 Corrida '+S.roundSeconds+'s':'⚡ Relâmpago '+S.wordSeconds+'s/palavra'),
+    'Nível '+LEVEL_LABELS[S.level],
+    S.teams?('👥 '+S.teamCount+' times × '+S.teamRounds+' rodada'+(S.teamRounds>1?'s':'')):'Solo'
+  ];
+  $('start-summary').textContent=parts.join('  ·  ');
+}
+
+/* ================================================================
+   PALAVRAS PERSONALIZADAS
+================================================================ */
+function loadCustom(){
+  const raw=store.get('mimica_custom');
+  if(raw){ try{ const arr=JSON.parse(raw); BANK.custom[1]=arr; BANK.custom[2]=arr.slice(); BANK.custom[3]=arr.slice(); }catch(e){} }
+  refreshCatChips();
+}
+$('btn-open-custom').onclick=()=>{
+  $('custom-input').value=(BANK.custom[1]||[]).join('\n');
+  updateCustomCount();
+  $('modal-custom').classList.add('show');
+};
+$('custom-input').oninput=updateCustomCount;
+function updateCustomCount(){
+  const n=$('custom-input').value.split('\n').map(s=>s.trim()).filter(Boolean).length;
+  $('custom-count').textContent=n+' palavra'+(n===1?'':'s');
+}
+$('btn-custom-cancel').onclick=()=>$('modal-custom').classList.remove('show');
+$('btn-custom-save').onclick=()=>{
+  const arr=[...new Set($('custom-input').value.split('\n').map(s=>s.trim()).filter(Boolean))];
+  BANK.custom[1]=arr; BANK.custom[2]=arr.slice(); BANK.custom[3]=arr.slice();
+  store.set('mimica_custom',JSON.stringify(arr));
+  if(arr.length>0) S.cats.add('custom'); else S.cats.delete('custom');
+  refreshCatChips(); refreshSummary();
+  $('modal-custom').classList.remove('show');
+};
+
+/* ================================================================
+   RECORDES
+================================================================ */
+function recKey(){ return 'mimica_rec_'+S.mode+'_'+S.level; }
+function getRec(mode,level){ const v=store.get('mimica_rec_'+mode+'_'+level); return v?parseInt(v):0; }
+function maybeSetRecord(score){
+  if(S.teams) return false;
+  const cur=getRec(S.mode,S.level);
+  if(score>cur){ store.set(recKey(),String(score)); return true; }
+  return false;
+}
+$('btn-open-records').onclick=()=>{
+  const grid=$('rec-grid'); grid.innerHTML='';
+  ['total','perword'].forEach(m=>{
+    ['facil','medio','dificil'].forEach(l=>{
+      const v=getRec(m,l);
+      const row=document.createElement('div'); row.className='rec-row';
+      row.innerHTML=`<div class="lbl">${m==='total'?'🏃 Corrida':'⚡ Relâmpago'}<small>Nível ${LEVEL_LABELS[l]}</small></div><div class="pt">${v||'—'}</div>`;
+      grid.appendChild(row);
+    });
+  });
+  show('records');
+};
+$('btn-records-back').onclick=()=>show('home');
+
+/* ================================================================
+   FLUXO DE PARTIDA
+================================================================ */
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+$('btn-start').onclick=()=>{
+  ac(); // desbloqueia áudio no gesto
+  if(S.teams){
+    S.teamScores=new Array(S.teamCount).fill(0);
+    S.turnQueue=[];
+    for(let r=0;r<S.teamRounds;r++) for(let t=0;t<S.teamCount;t++) S.turnQueue.push(t);
+    S.turnIndex=0;
+  }
+  S.used=new Set();
+  startReady();
+};
+
+function currentTeam(){ return S.teams ? S.turnQueue[S.turnIndex] : -1; }
+
+function startReady(){
+  show('ready');
+  const t=currentTeam();
+  const rt=$('ready-team');
+  if(t>=0){
+    rt.textContent=S.teamNames[t];
+    rt.style.background=TEAM_COLORS[t]+'33';
+    rt.style.color=TEAM_COLORS[t];
+    rt.style.border='1px solid '+TEAM_COLORS[t];
+    rt.classList.add('show');
+    const roundNum=Math.floor(S.turnIndex/S.teamCount)+1;
+    $('ready-mode-label').textContent=MODE_LABELS[S.mode]+' · Rodada '+roundNum+'/'+S.teamRounds;
+  } else {
+    rt.classList.remove('show');
+    $('ready-mode-label').textContent=MODE_LABELS[S.mode];
+  }
+  $('ready-level-label').textContent='Nível '+LEVEL_LABELS[S.level];
+  $('ready-hint').textContent = S.tilt
+    ? 'Coloque o celular na testa com a tela pra fora. Incline pra baixo = acertou, pra cima = pula!'
+    : 'Passa o celular pra quem vai fazer a mímica. Ninguém mais pode ver a palavra!';
+  let n=3; $('ready-countdown').textContent=n; sfx.count();
+  clearInterval(S.timerId);
+  S.timerId=setInterval(()=>{
+    n--;
+    if(n>0){ $('ready-countdown').textContent=n; sfx.count(); }
+    else{ clearInterval(S.timerId); sfx.go(); beginRound(); }
+  },800);
+}
+$('btn-cancel-ready').onclick=()=>{ clearInterval(S.timerId); show('home'); };
+
+function buildDeck(){
+  let pool=poolFor().filter(x=>!S.used.has(x.w));
+  if(pool.length<10){ S.used=new Set(); pool=poolFor(); }
+  return shuffle(pool);
+}
+
+function beginRound(){
+  S.score=0; S.history=[]; S.paused=false; S.skipsUsed=0; S.wordsThisTurn=0;
+  S.deck=buildDeck();
+  $('game-level-label').textContent=LEVEL_LABELS[S.level];
+  $('score-label').textContent=0;
+  setPauseUI(false);
+  updateSkipUI();
+
+  const t=currentTeam();
+  const banner=$('team-banner');
+  if(t>=0){
+    banner.textContent='👥 '+S.teamNames[t]+' — vez de vocês!';
+    banner.style.background=TEAM_COLORS[t]+'26';
+    banner.style.color=TEAM_COLORS[t];
+    banner.classList.add('show');
+  } else banner.classList.remove('show');
+
+  $('tilt-hints').classList.toggle('show',S.tilt);
+  if(S.tilt) enableTilt(); else disableTilt();
+
+  S.timeLeft = S.mode==='total' ? S.roundSeconds : S.wordSeconds;
+  nextWord(true);
+  updateRing(true);
+  show('game');
+  keepAwake();
+  clearInterval(S.timerId);
+  S.timerId=setInterval(tick,1000);
+}
+
+function drawBonus(){ return S.bonus && Math.random()<0.15; }
+
+function nextWord(first){
+  if(S.deck.length===0) S.deck=buildDeck();
+  const item=S.deck.pop();
+  S.current=item; S.used.add(item.w);
+  S.currentBonus=drawBonus();
+  const ticket=$('ticket');
+  $('word-text').textContent=item.w.toUpperCase();
+  $('cat-tag').textContent=BANK[item.c].icon+' '+BANK[item.c].name;
+  ticket.classList.toggle('bonus',S.currentBonus);
+  ticket.classList.remove('flip'); void ticket.offsetWidth; ticket.classList.add('flip');
+  if(S.mode==='perword' && !first){ S.timeLeft=S.wordSeconds; updateRing(true); }
+  if(S.mode==='perword' && first){ S.timeLeft=S.wordSeconds; }
+  S.tiltNeutral=false; // exige voltar ao neutro antes do próximo gesto
+}
+
+const CIRC=2*Math.PI*25;
+$('timer-circle').style.strokeDasharray=CIRC;
+function updateRing(full){
+  const total=S.mode==='total'?S.roundSeconds:S.wordSeconds;
+  const frac=full?1:Math.max(0,S.timeLeft/total);
+  $('timer-circle').style.strokeDashoffset=CIRC*(1-frac);
+  $('timer-num').textContent=S.timeLeft;
+  const wrap=$('timer-wrap');
+  const urgent=S.mode==='total'?10:3;
+  wrap.classList.toggle('urgent',S.timeLeft<=urgent && S.timeLeft>0);
+}
+
+function tick(){
+  if(S.paused) return;
+  S.timeLeft--;
+  updateRing(false);
+  const urgent=S.mode==='total'?10:3;
+  if(S.timeLeft<=urgent && S.timeLeft>0){ sfx.tick(); vibrate(40); }
+  if(S.timeLeft<=0){
+    if(S.mode==='total'){
+      clearInterval(S.timerId); sfx.buzzer(); vibrate([120,60,120]);
+      endRound();
+    } else {
+      // relâmpago: palavra queimou, segue o jogo
+      sfx.pass(); vibrate(80);
+      S.history.push({word:S.current.w,cat:S.current.c,hit:false,auto:true});
+      flashFeedback('bad');
+      S.wordsThisTurn++;
+      if(S.teams && S.wordsThisTurn>=PERWORD_WORDS_PER_TURN){ clearInterval(S.timerId); sfx.buzzer(); endRound(); return; }
+      nextWord();
+    }
+  }
+}
+
+function flashFeedback(kind){
+  const f=$('flash'); f.className=''; void f.offsetWidth; f.className=kind;
+}
+
+function doHit(){
+  if(!screenIs('game')||S.paused) return;
+  const pts=S.currentBonus?3:1;
+  S.score+=pts;
+  $('score-label').textContent=S.score;
+  S.history.push({word:S.current.w,cat:S.current.c,hit:true,bonus:S.currentBonus});
+  S.currentBonus?sfx.bonus():sfx.ok();
+  vibrate(60);
+  flashFeedback('ok');
+  S.wordsThisTurn++;
+  if(S.mode==='perword' && S.teams && S.wordsThisTurn>=PERWORD_WORDS_PER_TURN){ clearInterval(S.timerId); endRound(); return; }
+  nextWord();
+}
+function doPass(){
+  if(!screenIs('game')||S.paused) return;
+  if(S.skipLimit>=0 && S.skipsUsed>=S.skipLimit){ sfx.pass(); vibrate([40,40,40]); return; }
+  S.skipsUsed++;
+  if(S.skipPenalty && S.score>0){ S.score--; $('score-label').textContent=S.score; }
+  S.history.push({word:S.current.w,cat:S.current.c,hit:false});
+  sfx.pass(); vibrate(50);
+  flashFeedback('bad');
+  updateSkipUI();
+  S.wordsThisTurn++;
+  if(S.mode==='perword' && S.teams && S.wordsThisTurn>=PERWORD_WORDS_PER_TURN){ clearInterval(S.timerId); endRound(); return; }
+  nextWord();
+}
+$('btn-ok').onclick=doHit;
+$('btn-pass').onclick=doPass;
+
+function updateSkipUI(){
+  const el=$('skip-left');
+  if(S.skipLimit<0){ el.innerHTML='&nbsp;'; return; }
+  const left=S.skipLimit-S.skipsUsed;
+  el.textContent='restam '+left;
+  $('btn-pass').disabled = S.paused || left<=0;
+}
+
+$('btn-end-round').onclick=()=>{ clearInterval(S.timerId); endRound(); };
+
+/* -------- PAUSE -------- */
+function setPauseUI(p){
+  S.paused=p;
+  $('btn-pause').textContent=p?'▶':'⏸';
+  $('btn-pause').classList.toggle('is-paused',p);
+  $('pause-overlay').classList.toggle('show',p);
+  $('timer-wrap').classList.toggle('paused',p);
+  $('btn-ok').disabled=p;
+  $('btn-pass').disabled=p||(S.skipLimit>=0 && S.skipsUsed>=S.skipLimit);
+}
+$('btn-pause').onclick=()=>{ if(screenIs('game')) setPauseUI(!S.paused); };
+
+/* -------- MODO TESTA (inclinar) -------- */
+function onOrientation(e){
+  if(!screenIs('game')||S.paused||!S.tilt) return;
+  const beta=e.beta; if(beta==null) return;
+  // neutro ≈ celular na vertical (beta entre 55 e 125)
+  if(beta>55 && beta<125){ S.tiltNeutral=true; return; }
+  if(!S.tiltNeutral) return;
+  if(beta>=140){ S.tiltNeutral=false; doHit(); }        // tela pro chão = acertou
+  else if(beta<=35 && beta>=-90){ S.tiltNeutral=false; doPass(); } // tela pro teto = pula
+}
+function enableTilt(){ window.addEventListener('deviceorientation',onOrientation); }
+function disableTilt(){ window.removeEventListener('deviceorientation',onOrientation); }
+
+/* ================================================================
+   FIM DE RODADA / PLACAR / CAMPEÃO
+================================================================ */
+function endRound(){
+  disableTilt(); releaseAwake();
+  const t=currentTeam();
+  if(t>=0) S.teamScores[t]+=S.score;
+
+  $('final-score').textContent=S.score;
+
+  // recorde (solo)
+  const isRec=maybeSetRecord(S.score);
+  $('record-toast').classList.toggle('show',isRec);
+  if(isRec){ sfx.bonus(); vibrate([80,60,80,60,150]); }
+
+  // lista de palavras
+  const list=$('word-lists'); list.innerHTML='';
+  S.history.slice().reverse().forEach(h=>{
+    const row=document.createElement('div');
+    row.className='word-row'+(h.hit?'':' pass');
+    const tag=h.hit?(h.bonus?'<span class="tag bonus">★ +3</span>':'<span class="tag ok">Acertou</span>')
+                   :(h.auto?'<span class="tag pass">Tempo</span>':'<span class="tag pass">Pulou</span>');
+    row.innerHTML=`<span class="w">${h.word}</span>${tag}`;
+    list.appendChild(row);
+  });
+
+  // placar parcial em times
+  const mid=$('mid-scoreboard');
+  if(S.teams){
+    mid.style.display='flex';
+    renderScoreboard(mid,false);
+    const hasNext=S.turnIndex+1<S.turnQueue.length;
+    $('results-eyebrow').textContent='Fim da vez de '+S.teamNames[t];
+    $('btn-next-action').textContent=hasNext?('▶ Vez de '+S.teamNames[S.turnQueue[S.turnIndex+1]]):'🏆 Ver campeão';
+  } else {
+    mid.style.display='none';
+    $('results-eyebrow').textContent='Fim da rodada';
+    $('btn-next-action').textContent='Jogar de novo';
+  }
+  show('results');
+}
+
+function renderScoreboard(container,final){
+  container.innerHTML='';
+  const max=Math.max(...S.teamScores);
+  S.teamScores.forEach((pt,i)=>{
+    const row=document.createElement('div');
+    row.className='score-row'+((final&&pt===max)?' leader':'');
+    row.innerHTML=`<span class="team-dot" style="background:${TEAM_COLORS[i]};width:12px;height:12px;border-radius:50%;"></span>
+      <span class="nm">${S.teamNames[i]}</span><span class="pt">${pt}</span>`;
+    container.appendChild(row);
+  });
+}
+
+$('btn-next-action').onclick=()=>{
+  if(S.teams){
+    S.turnIndex++;
+    if(S.turnIndex<S.turnQueue.length){ startReady(); }
+    else{ showChampion(); }
+  } else {
+    startReady();
+  }
+};
+$('btn-back-home').onclick=()=>{ show('home'); };
+
+function showChampion(){
+  const max=Math.max(...S.teamScores);
+  const winners=S.teamScores.map((p,i)=>p===max?i:-1).filter(i=>i>=0);
+  $('champ-name').textContent = winners.length>1 ? 'Empate! '+winners.map(i=>S.teamNames[i]).join(' & ') : S.teamNames[winners[0]];
+  renderScoreboard($('final-scoreboard'),true);
+  show('champion');
+  sfx.bonus(); setTimeout(()=>sfx.bonus(),300);
+  vibrate([100,80,100,80,200]);
+  spawnConfetti();
+}
+function spawnConfetti(){
+  const colors=['#f2c14e','#d1495b','#3da35d','#4ea8de','#fff8ed'];
+  for(let i=0;i<60;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'vw';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDuration=(2.2+Math.random()*2)+'s';
+    c.style.animationDelay=(Math.random()*0.8)+'s';
+    c.style.transform='rotate('+Math.random()*360+'deg)';
+    document.getElementById('app').appendChild(c);
+    setTimeout(()=>c.remove(),5200);
+  }
+}
+$('btn-champ-home').onclick=()=>show('home');
+$('btn-rematch').onclick=()=>{
+  S.teamScores=new Array(S.teamCount).fill(0);
+  S.turnIndex=0; S.used=new Set();
+  startReady();
+};
+
+/* ================================================================
+   INIT
+================================================================ */
+loadCustom();
+refreshTimeUI();
+refreshCatChips();
+refreshSummary();
+</script>
+</body>
+</html>

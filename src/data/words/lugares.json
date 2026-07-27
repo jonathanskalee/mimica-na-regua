@@ -1,0 +1,51 @@
+{
+  "id": "lugares",
+  "name": "Lugares",
+  "icon": "📍",
+  "facil": [
+    "Casa",
+    "Igreja",
+    "Praia",
+    "Escola",
+    "Hospital",
+    "Padaria",
+    "Fazenda",
+    "Piscina",
+    "Cinema",
+    "Mercado",
+    "Parque",
+    "Farmácia"
+  ],
+  "medio": [
+    "Aeroporto",
+    "Circo",
+    "Zoológico",
+    "Shopping",
+    "Jardim",
+    "Cachoeira",
+    "Lago",
+    "Montanha-russa",
+    "Museu",
+    "Estádio",
+    "Delegacia",
+    "Biblioteca",
+    "Salão de beleza",
+    "Rodoviária",
+    "Motel",
+    "Pedágio"
+  ],
+  "dificil": [
+    "Hidrelétrica",
+    "Geleira",
+    "Vulcão",
+    "Deserto",
+    "Cemitério",
+    "Labirinto",
+    "Observatório",
+    "Plataforma de petróleo",
+    "Fronteira",
+    "Cartório",
+    "Zona portuária",
+    "Fórum"
+  ]
+}
