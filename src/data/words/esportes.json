@@ -7,20 +7,50 @@
     { "w": "Natação", "h": "Faça braçadas fortes na água e vire o rosto pra respirar" },
     { "w": "Vôlei", "h": "Salte e bata numa bola imaginária por cima de uma rede" },
     { "w": "Basquete", "h": "Quique uma bola imaginária correndo e arremesse pra cima" },
-    { "w": "Corrida", "h": "Agache na posição de largada e dispare correndo forte" }
+    { "w": "Corrida", "h": "Agache na posição de largada e dispare correndo forte" },
+    { "w": "Tênis", "h": "Segure uma raquete imaginária e sirva batendo forte numa bola" },
+    { "w": "Golfe", "h": "Curve os braços num taco imaginário e dê uma tacada suave numa bolinha no chão" },
+    { "w": "Judô", "h": "Segure o quimono de alguém e derrube com uma rasteira" },
+    { "w": "Karatê", "h": "Grite um golpe seco no ar com a mão em pé de guarda" },
+    { "w": "Patinação", "h": "Deslize os pés como se estivesse no gelo, braços equilibrando" },
+    { "w": "Remo", "h": "Sente e puxe um remo imaginário com as duas mãos, pra trás e pra frente" },
+    { "w": "Atletismo", "h": "Agache na largada e dispare correndo, pulando uma barreira imaginária" },
+    { "w": "Xadrez", "h": "Mova uma peça imaginária num tabuleiro e aperte um relógio" },
+    { "w": "Sinuca", "h": "Incline sobre uma mesa imaginária e mire um taco numa bolinha" },
+    { "w": "Pingue-pongue", "h": "Segure uma raquete pequena e rebata rapidinho de um lado a outro" }
   ],
   "medio": [
     { "w": "Boxe", "h": "Solte socos rápidos no ar, esquivando a cabeça de um lado a outro" },
     { "w": "Surfe", "h": "Fique de pé equilibrando os braços numa prancha imaginária" },
     { "w": "Skate", "h": "Dobre os joelhos equilibrando sobre uma tábua com rodinhas" },
     { "w": "Ciclismo", "h": "Pedale rápido segurando um guidão imaginário, corpo inclinado" },
-    { "w": "Ginástica", "h": "Estique os braços e finja dar uma cambalhota no ar" }
+    { "w": "Ginástica", "h": "Estique os braços e finja dar uma cambalhota no ar" },
+    { "w": "Rugby", "h": "Corra segurando uma bola oval debaixo do braço e derrube alguém" },
+    { "w": "Handebol", "h": "Corra driblando uma bola com uma mão e arremesse forte" },
+    { "w": "Taekwondo", "h": "Dê um chute alto girando o corpo no ar" },
+    { "w": "Triatlo", "h": "Nade, depois pedale e depois corra, tudo em sequência, ofegante" },
+    { "w": "Escalada esportiva", "h": "Escale uma parede imaginária buscando apoios com as mãos e os pés" },
+    { "w": "Wrestling", "h": "Agarre alguém pela cintura e derrube no chão de corpo" },
+    { "w": "Polo aquático", "h": "Nade segurando uma bola com uma mão erguida fora d'água" },
+    { "w": "Squash", "h": "Bata uma bolinha imaginária numa parede com uma raquete" },
+    { "w": "Badminton", "h": "Bata numa peteca imaginária com uma raquete leve, olhando pra cima" },
+    { "w": "Motocross", "h": "Segure um guidão imaginário e salte com a moto num barranco" }
   ],
   "dificil": [
     { "w": "Esgrima", "h": "Estique um braço com uma espada fina, avançando e recuando" },
     { "w": "Arco e flecha", "h": "Puxe uma corda esticada até o rosto e solte mirando longe" },
     { "w": "Halterofilismo", "h": "Agache e erga um peso pesadíssimo acima da cabeça, tremendo" },
     { "w": "Hipismo", "h": "Sente como se montasse um cavalo e salte um obstáculo alto" },
-    { "w": "Curling", "h": "Empurre uma pedra imaginária no gelo e esfregue o chão na frente dela" }
+    { "w": "Curling", "h": "Empurre uma pedra imaginária no gelo e esfregue o chão na frente dela" },
+    { "w": "Bobsled", "h": "Empurre um trenó imaginário correndo e pule dentro dele descendo rápido" },
+    { "w": "Decatlo", "h": "Alterne entre correr, saltar e arremessar, dez vezes, exausto" },
+    { "w": "Salto com vara", "h": "Corra segurando uma vara comprida e salte por cima de uma barra alta" },
+    { "w": "Pentatlo moderno", "h": "Esgrima, depois nade, depois cavalgue, atire e corra, em sequência" },
+    { "w": "Luta greco-romana", "h": "Agarre a cintura de alguém sem usar as pernas e derrube" },
+    { "w": "Vela (esporte)", "h": "Puxe uma corda imaginária ajustando uma vela ao vento, inclinando o corpo" },
+    { "w": "Tiro esportivo", "h": "Feche um olho, mire uma arma imaginária parada e atire num alvo" },
+    { "w": "Skeleton", "h": "Deite de bruços numa prancha imaginária e deslize de cabeça pra baixo" },
+    { "w": "Ginástica rítmica", "h": "Gire uma fita comprida no ar dançando e fazendo espacates" },
+    { "w": "Maratona", "h": "Corra bem devagar por muito tempo, ofegante, e cruze uma faixa no fim" }
   ]
 }
