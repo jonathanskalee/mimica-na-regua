@@ -414,6 +414,15 @@ describe("preferências", () => {
     expect(saved.teamCount).toBe(3);
   });
 
+  it("hintsEnabled sobrevive ao recarregar", () => {
+    reset();
+    expect(s().hintsEnabled).toBe(true);
+    useGame.getState().setHintsEnabled(false);
+    expect(s().hintsEnabled).toBe(false);
+    const saved = JSON.parse(kv.get("mimica_settings")!);
+    expect(saved.hintsEnabled).toBe(false);
+  });
+
   it("o onboarding aparece uma vez só", () => {
     expect(kv.get("mimica_onboarded")).toBeNull();
     reset({ showOnboarding: true });

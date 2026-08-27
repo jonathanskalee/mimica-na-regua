@@ -131,6 +131,7 @@ interface GameActions {
   toggleCat: (id: string) => void;
   toggleAllCats: () => void;
   setBonusEnabled: (v: boolean) => void;
+  setHintsEnabled: (v: boolean) => void;
   setSkipLimit: (v: number) => void;
   setSkipPenalty: (v: boolean) => void;
   setWordLimit: (v: number) => void;
@@ -433,6 +434,10 @@ export const useGame = create<GameState>((set, get) => ({
   },
   setBonusEnabled: (bonusEnabled) => {
     set({ bonusEnabled });
+    persist(get);
+  },
+  setHintsEnabled: (hintsEnabled) => {
+    set({ hintsEnabled });
     persist(get);
   },
   setSkipLimit: (skipLimit) => {
