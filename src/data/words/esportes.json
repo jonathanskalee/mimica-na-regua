@@ -1,0 +1,26 @@
+{
+  "id": "esportes",
+  "name": "Esportes",
+  "icon": "🏅",
+  "facil": [
+    { "w": "Futebol", "h": "Chute uma bola imaginária e comemore um gol correndo de braços abertos" },
+    { "w": "Natação", "h": "Faça braçadas fortes na água e vire o rosto pra respirar" },
+    { "w": "Vôlei", "h": "Salte e bata numa bola imaginária por cima de uma rede" },
+    { "w": "Basquete", "h": "Quique uma bola imaginária correndo e arremesse pra cima" },
+    { "w": "Corrida", "h": "Agache na posição de largada e dispare correndo forte" }
+  ],
+  "medio": [
+    { "w": "Boxe", "h": "Solte socos rápidos no ar, esquivando a cabeça de um lado a outro" },
+    { "w": "Surfe", "h": "Fique de pé equilibrando os braços numa prancha imaginária" },
+    { "w": "Skate", "h": "Dobre os joelhos equilibrando sobre uma tábua com rodinhas" },
+    { "w": "Ciclismo", "h": "Pedale rápido segurando um guidão imaginário, corpo inclinado" },
+    { "w": "Ginástica", "h": "Estique os braços e finja dar uma cambalhota no ar" }
+  ],
+  "dificil": [
+    { "w": "Esgrima", "h": "Estique um braço com uma espada fina, avançando e recuando" },
+    { "w": "Arco e flecha", "h": "Puxe uma corda esticada até o rosto e solte mirando longe" },
+    { "w": "Halterofilismo", "h": "Agache e erga um peso pesadíssimo acima da cabeça, tremendo" },
+    { "w": "Hipismo", "h": "Sente como se montasse um cavalo e salte um obstáculo alto" },
+    { "w": "Curling", "h": "Empurre uma pedra imaginária no gelo e esfregue o chão na frente dela" }
+  ]
+}

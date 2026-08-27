@@ -7,6 +7,7 @@ import lugares from "./words/lugares.json";
 import filmes from "./words/filmes.json";
 import personagens from "./words/personagens.json";
 import conceitos from "./words/conceitos.json";
+import esportes from "./words/esportes.json";
 
 export type Level = "facil" | "medio" | "dificil";
 export type Mode = "total" | "perword";
@@ -35,6 +36,7 @@ export const CATEGORIES: Category[] = [
   filmes,
   personagens,
   conceitos,
+  esportes,
 ];
 
 export const LEVEL_LABELS: Record<Level, string> = {
