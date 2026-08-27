@@ -1,0 +1,26 @@
+{
+  "id": "desenhos",
+  "name": "Desenhos e Animações",
+  "icon": "📺",
+  "facil": [
+    { "w": "Peppa Pig", "h": "Pule bem alto em poças de lama imaginárias, rindo igual porquinho" },
+    { "w": "Patrulha Canina", "h": "Ande de quatro latindo e finja apertar um walkie-talkie na patinha" },
+    { "w": "Masha e o Urso", "h": "Corra fazendo bagunça enquanto um urso grande tenta te alcançar" },
+    { "w": "Os Simpsons", "h": "Faça um topete pontudo com os dedos e fale sem som, exagerado" },
+    { "w": "Pica-Pau", "h": "Bata a cabeça repetidamente pra frente rindo alto e estridente" }
+  ],
+  "medio": [
+    { "w": "Naruto", "h": "Corra bem inclinado pra frente com os braços esticados pra trás" },
+    { "w": "Dragon Ball", "h": "Junte as mãos na lateral do corpo carregando energia e solte pra frente" },
+    { "w": "Pokémon", "h": "Jogue uma bolinha imaginária pra frente capturando uma criatura" },
+    { "w": "Avatar - A Lenda de Aang", "h": "Mova os braços como se controlasse vento, água, terra e fogo" },
+    { "w": "Scooby-Doo", "h": "Trema de medo escondido atrás de alguém, latindo alto de susto" }
+  ],
+  "dificil": [
+    { "w": "Death Note", "h": "Escreva um nome imaginário num caderno com um sorriso maligno" },
+    { "w": "One Piece", "h": "Estique um braço bem longe como borracha, apontando um tesouro" },
+    { "w": "Ataque dos Titãs", "h": "Estique os braços gigantes e pise pesado sobre um muro imaginário" },
+    { "w": "Neon Genesis Evangelion", "h": "Sente dentro de um robô gigante imaginário apertando alavancas nervoso" },
+    { "w": "Rick and Morty", "h": "Arrote alto no meio da fala e abra um portal verde com as mãos" }
+  ]
+}
