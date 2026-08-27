@@ -112,6 +112,11 @@ export default function GameScreen() {
             <div className="font-display tracking-tight-display text-[34px] leading-[1.05] break-words">
               {g.current?.w.toUpperCase() ?? "…"}
             </div>
+            {g.hintsEnabled && g.current?.h && (
+              <p className="text-[12px] italic text-[#8a6a70] px-2 leading-snug">
+                💡 {g.current.h}
+              </p>
+            )}
           </div>
 
           {/* canhoto */}

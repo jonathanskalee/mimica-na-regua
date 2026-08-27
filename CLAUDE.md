@@ -78,8 +78,9 @@ Tudo do legacy foi migrado, mais o que veio depois:
 - **Modo Times**: 2–4 times com nome e cor, 1–3 rodadas, placar parcial entre vezes, tela de
   campeão com confete e empate tratado, revanche. As palavras não se repetem entre os times.
 - **Modo testa (tilt)** com calibração e permissão iOS
-- 3 níveis, 9 categorias (~470 palavras), sem repetição na sessão
+- 3 níveis, 11 categorias (~670 palavras), sem repetição na sessão
 - Palavras bônus (15%, valem 3), limite de pulos (∞/3/5), penalidade de pulo
+- **Dica de atuação** por palavra (visível só pra quem mimica), com toggle `hintsEnabled` nas configurações
 - Relógio por timestamp — não atrasa quando a aba perde o foco
 - Flash verde/vermelho, pause com overlay, sons WebAudio, vibração, wake lock
 - Onboarding de 3 cards na primeira abertura
@@ -87,7 +88,7 @@ Tudo do legacy foi migrado, mais o que veio depois:
   em partidas de times) e palavras personalizadas em chaves próprias
 - PWA completo: ícones normal e maskable, fontes precacheadas para funcionar offline
 
-76 testes cobrem store, times, tilt e preferências.
+82 testes cobrem store, times, tilt e preferências.
 
 ## Pendências
 
