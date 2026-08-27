@@ -117,3 +117,19 @@ describe("round-trip", () => {
     expect(loadSettings()).toEqual(custom);
   });
 });
+
+describe("loadSettings — hintsEnabled", () => {
+  it("vem ligado por padrão", () => {
+    expect(loadSettings().hintsEnabled).toBe(true);
+  });
+
+  it("aceita desligar", () => {
+    writeJson({ hintsEnabled: false });
+    expect(loadSettings().hintsEnabled).toBe(false);
+  });
+
+  it("ignora valor que não é booleano", () => {
+    writeJson({ hintsEnabled: "sim" });
+    expect(loadSettings().hintsEnabled).toBe(true);
+  });
+});

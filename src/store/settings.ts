@@ -38,6 +38,7 @@ export interface PersistedSettings {
   wordSeconds: number;
   cats: string[];
   bonusEnabled: boolean;
+  hintsEnabled: boolean;
   skipLimit: number;
   skipPenalty: boolean;
   wordLimit: number;
@@ -60,6 +61,7 @@ export const DEFAULT_SETTINGS: PersistedSettings = {
   wordSeconds: 10,
   cats: allCatIds(),
   bonusEnabled: true,
+  hintsEnabled: true,
   skipLimit: -1,
   skipPenalty: false,
   wordLimit: 15,
@@ -149,6 +151,7 @@ export function loadSettings(): PersistedSettings {
     ),
     cats: readCats(s.cats),
     bonusEnabled: bool(s.bonusEnabled, DEFAULT_SETTINGS.bonusEnabled),
+    hintsEnabled: bool(s.hintsEnabled, DEFAULT_SETTINGS.hintsEnabled),
     skipLimit: oneOf(s.skipLimit, SKIP_LIMITS, DEFAULT_SETTINGS.skipLimit),
     skipPenalty: bool(s.skipPenalty, DEFAULT_SETTINGS.skipPenalty),
     wordLimit: oneOf(s.wordLimit, WORD_LIMITS, DEFAULT_SETTINGS.wordLimit),

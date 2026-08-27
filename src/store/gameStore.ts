@@ -69,6 +69,7 @@ export interface GameData {
   wordSeconds: number;
   cats: Set<string>;
   bonusEnabled: boolean;
+  hintsEnabled: boolean;
   skipLimit: number; // -1 = ilimitado
   skipPenalty: boolean;
   wordLimit: number; // 0 = ilimitado; só vale no Relâmpago
@@ -227,6 +228,7 @@ export function pickSettings(s: GameData): PersistedSettings {
     wordSeconds: s.wordSeconds,
     cats: [...s.cats],
     bonusEnabled: s.bonusEnabled,
+    hintsEnabled: s.hintsEnabled,
     skipLimit: s.skipLimit,
     skipPenalty: s.skipPenalty,
     wordLimit: s.wordLimit,
@@ -257,6 +259,7 @@ export function makeInitialState(
     wordSeconds: s.wordSeconds,
     cats: new Set(s.cats),
     bonusEnabled: s.bonusEnabled,
+    hintsEnabled: s.hintsEnabled,
     skipLimit: s.skipLimit,
     skipPenalty: s.skipPenalty,
     wordLimit: s.wordLimit,
