@@ -233,6 +233,13 @@ export default function HomeScreen() {
         <Panel>
           <SectionTitle>Regras</SectionTitle>
           <div className="flex flex-col gap-3 text-[13px]">
+            <Row label="💡 Dica de atuação">
+              <Switch
+                label="Dica de atuação"
+                on={g.hintsEnabled}
+                onToggle={() => g.setHintsEnabled(!g.hintsEnabled)}
+              />
+            </Row>
             <Row label="✨ Palavras bônus (valem 3)">
               <Switch
                 label="Palavras bônus"
