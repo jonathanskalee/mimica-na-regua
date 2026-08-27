@@ -11,13 +11,18 @@ import conceitos from "./words/conceitos.json";
 export type Level = "facil" | "medio" | "dificil";
 export type Mode = "total" | "perword";
 
+export interface WordEntry {
+  w: string;
+  h: string;
+}
+
 export interface Category {
   id: string;
   name: string;
   icon: string;
-  facil: string[];
-  medio: string[];
-  dificil: string[];
+  facil: WordEntry[];
+  medio: WordEntry[];
+  dificil: WordEntry[];
 }
 
 export const CATEGORIES: Category[] = [
@@ -43,12 +48,12 @@ export const MODE_LABELS: Record<Mode, string> = {
   perword: "Relâmpago · tempo por palavra",
 };
 
-/** Retorna o pool de palavras {word, categoryId} para nível + categorias selecionadas. */
+/** Retorna o pool de palavras {w, c, h} para nível + categorias selecionadas. */
 export function buildPool(level: Level, categoryIds: Set<string>, customWords: string[] = []) {
-  const pool: { w: string; c: string }[] = [];
+  const pool: { w: string; c: string; h?: string }[] = [];
   for (const cat of CATEGORIES) {
     if (!categoryIds.has(cat.id)) continue;
-    for (const w of cat[level]) pool.push({ w, c: cat.id });
+    for (const entry of cat[level]) pool.push({ w: entry.w, c: cat.id, h: entry.h });
   }
   if (categoryIds.has("custom")) {
     for (const w of customWords) pool.push({ w, c: "custom" });

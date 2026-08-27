@@ -39,13 +39,14 @@ beforeEach(() => {
 afterEach(resetClock);
 
 describe("buildPool", () => {
-  it("retorna palavras das categorias selecionadas no nível", () => {
+  it("retorna palavras das categorias selecionadas no nível, com dica", () => {
     const pool = buildPool("facil", new Set(["animais"]));
     expect(pool.length).toBeGreaterThan(10);
     expect(pool.every((p) => p.c === "animais")).toBe(true);
+    expect(pool.every((p) => typeof p.h === "string" && p.h.length > 0)).toBe(true);
   });
 
-  it("inclui palavras personalizadas quando 'custom' está ativo", () => {
+  it("inclui palavras personalizadas quando 'custom' está ativo, sem dica", () => {
     const pool = buildPool("dificil", new Set(["custom"]), ["Piada interna"]);
     expect(pool).toEqual([{ w: "Piada interna", c: "custom" }]);
   });

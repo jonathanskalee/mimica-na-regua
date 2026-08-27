@@ -52,6 +52,7 @@ export interface HistoryItem {
 export interface WordCard {
   w: string;
   c: string;
+  h?: string;
 }
 
 /** Chance de uma palavra valer 3 pontos em vez de 1. */
